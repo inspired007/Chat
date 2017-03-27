@@ -12,15 +12,20 @@ app.get('/', function(req, res){
 
 
 io.on('connection', function(socket){
-    socket.on('join', function(name){
-        socket.nickname = name;
+    socket.on('join', function(nickname){
+        socket.nickname = nickname;
+
+        //io.emit('chat', socket.nickname + ' joined the chat');
     });
 
     socket.on('chat message', function(msg){
         var nickname = socket.nickname;
-        //io.broadcast.emit('chat message', nickname + ": " + msg);
         io.emit('chat message', nickname + ": " + msg);
+/*        setTimeout(function () {
+            return io.emit('chat message','ok!');
+        }, 2000);*/
     });
+
 });
 
 

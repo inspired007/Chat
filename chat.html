@@ -210,7 +210,7 @@
             <div class="button minimize"></div>
             <div class="button maximize"></div>
         </div>
-        <div class="title">Christina's Chat</div>
+        <div class="title">"Christina's Chat"</div>
     </div>
     <ul id="messages">
 
@@ -240,20 +240,25 @@
 
 <script>
     $(function () {
-        var socket = io.connect('http://localhost:8080');
-
-        socket.on('chat message', function(msg){
-            var nickname =  $("#name").val();
-            socket.emit('join', nickname);
-            $('#messages').append($('<li>').text(msg));
-            window.scrollTo(0, document.body.scrollHeight);
-        });
+        var socket = io().connect('http://localhost:8080');
 
         $('form').submit(function(){
             socket.emit('chat message', $('.message_input').val());
             $('.message_input').val('');
             return false;
         });
+
+        socket.on('connect', function(data){
+            var nickname = prompt("What is your name");
+            socket.emit('join', nickname);
+        });
+
+        socket.on('chat message', function(msg){
+            $('#messages').append($('<li>').text(msg));
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+
+
     });
 </script>
 </body>
